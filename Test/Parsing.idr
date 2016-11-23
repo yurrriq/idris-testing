@@ -25,21 +25,22 @@ parseTestG : Show a => (title : Maybe String)
                    -> (inStr : String)
                    -> (exp : a)
                    -> (tFunc : a -> a -> Bool)
-                   -> IO ()
+                   -> IO Bool
 parseTestG title p inStr exp eq = do
   putStrLn $ unwords ["Test:", fromMaybe "Unnamed Test" title]
   case parse p inStr of
-    Left err  => with List do
+    Left err  => do
          putStrLn $ unlines [
                errLine
              , "Unexpected Parse Error:\n"
              , err
              , errLine
              ]
+         pure False
     Right res => do
       if eq res exp
-        then pure ()
-        else with List
+        then pure True
+        else do
            putStrLn $ unlines [
                  errLine
                , "Error:\n"
@@ -51,6 +52,7 @@ parseTestG title p inStr exp eq = do
                , "\t" ++ show exp
                , errLine
                ]
+           pure False
 
 ||| Run a parse test that is expected to fail.
 |||
@@ -60,12 +62,12 @@ parseTestG title p inStr exp eq = do
 parseTestB : Show a => (title : Maybe String)
                    -> (p : Parser a)
                    -> (inStr : String)
-                   -> IO ()
+                   -> IO Bool
 parseTestB title p inStr = do
   putStrLn $ unwords ["Begin Test:", fromMaybe "Unnamed Test" title]
   case parse p inStr of
-    Left err  => pure ()
-    Right res => with List
+    Left err  => pure True
+    Right res => do
         putStrLn $ unlines [
                  errLine
                , "Error:\n"
@@ -74,6 +76,7 @@ parseTestB title p inStr = do
                , "Was expected to fail"
                , errLine
                ]
+        pure False
 
 ||| Run a parse test to ensure a parse can parse a string.
 |||
@@ -83,18 +86,19 @@ parseTestB title p inStr = do
 canParse : Show a => (title : Maybe String)
                    -> (p : Parser a)
                    -> (inStr : String)
-                   -> IO ()
+                   -> IO Bool
 canParse title p inStr = do
   putStrLn $ unwords ["Begin Test:", fromMaybe "Unnamed Test" title]
   case parse p inStr of
-    Left err  => with List do
+    Left err  => do
          putStrLn $ unlines [
                errLine
              , "Unexpected Parse Error:\n"
              , err
              , errLine
              ]
-    Right res => pure ()
+         pure False
+    Right res => pure True
 
 ||| Run a parse test to ensure a parse cannot parse a string.
 |||
@@ -104,11 +108,11 @@ canParse title p inStr = do
 canParseNot : Show a => (title : Maybe String)
                      -> (p : Parser a)
                      -> (inStr : String)
-                     -> IO ()
+                     -> IO Bool
 canParseNot title p inStr = do
   putStrLn $ unwords ["Begin Test:", fromMaybe "Unnamed Test" title]
   case parse p inStr of
-    Left err  => pure ()
+    Left err  => pure True
     Right res => with List do
          putStrLn $ unlines [
                errLine
@@ -116,5 +120,6 @@ canParseNot title p inStr = do
              , show res
              , errLine
              ]
+         pure False
 
 -- --------------------------------------------------------------------- [ EOF ]

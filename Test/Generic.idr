@@ -20,12 +20,12 @@ genericTest : Show a => (title : Maybe String)
                      -> (given : a)
                      -> (expected : a)
                      -> (tFunc : a -> a -> Bool)
-                     -> IO ()
+                     -> IO Bool
 genericTest title g e eq = do
   putStrLn $ unwords ["Test:" , fromMaybe "Unnamed Test" title]
   if eq g e
-    then pure ()
-    else with List do
+    then pure True
+    else do
        putStrLn $ unwords [
              errLine
            , "\n"
@@ -39,5 +39,6 @@ genericTest title g e eq = do
            , errLine
            , "\n"
            ]
+       pure False
 
 -- --------------------------------------------------------------------- [ EOF ]
