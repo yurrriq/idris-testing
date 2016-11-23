@@ -6,6 +6,8 @@
 ||| Common Testing Utilities.
 module Test.Utils
 
+import Data.Vect
+
 %access export
 
 ||| Construct a string of `n` repetitions of `c`.
@@ -49,5 +51,31 @@ namespace Reporting
        r  <- x
        rs <- Reporting.runTests xs
        pure (r::rs)
+
+-- Lifted/modified from String.Extra (https://github.com/yurrriq/idris-string)
+private
+pluralize : String -> String -> Nat -> String
+pluralize singular plural count = unwords $
+  if 1 == count
+     then ["1", singular]
+     else [show count, plural]
+
+||| Return a summary of the given test `results`.
+|||
+||| ```idris example
+||| summary [True, False, True]
+||| ```
+|||
+||| @ results a vector of Boolean test results
+summary : (results : Vect n Bool) -> String
+summary {n} results =
+  pluralize "test" "tests" n ++ ", " ++
+  pluralize "failure" "failures" (fst (filter not results))
+
+||| Run a list of tests and print a summary.
+|||
+||| @ tests a list of test to run, i.e. I/O actions returning a Boolean
+summarizeTests : (tests : List (IO Bool)) -> IO ()
+summarizeTests tests = putStrLn !(summary <$> sequence (fromList tests))
 
 -- --------------------------------------------------------------------- [ EOF ]
