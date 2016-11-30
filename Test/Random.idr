@@ -3,7 +3,6 @@
 -- Copyright : (c) Jan de Muijnck-Hughes
 -- License   : see LICENSE
 -- --------------------------------------------------------------------- [ EOH ]
-
 ||| Random Data Generators.
 module Test.Random
 
@@ -85,9 +84,7 @@ genRndListKVUE s l f g = do srand s; pure !(doGen l (genKVPair f g))
       x  <- genElem f xs
       pure (x::xs)
 
-
 -- -------------------------------------------------------- [ Random Int Lists ]
-
 
 rndListIntE : (seed   : Integer)
            -> (bounds : Pair Integer Integer)
@@ -145,6 +142,5 @@ rndListIntKVU : (seed   : Integer)
              -> (len    : Nat)
              -> List (Pair Integer Integer)
 rndListIntKVU s bs n = runPure $ rndListIntKVUE s bs n
-
 
 -- --------------------------------------------------------------------- [ EOF ]

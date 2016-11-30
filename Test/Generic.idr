@@ -3,7 +3,7 @@
 -- Copyright : (c) Jan de Muijnck-Hughes
 -- License   : see LICENSE
 -- --------------------------------------------------------------------- [ EOH ]
-||| Generic Tests
+||| Generic Testing.
 module Test.Generic
 
 import public Test.Utils
@@ -12,10 +12,10 @@ import public Test.Utils
 
 ||| Run a generic test.
 |||
-||| @title     Optional Test title
-||| @given     The given string to parse
-||| @expected  The expected result
-||| @tFunc     The testing function to compare the results.
+||| @ title     an optional test title
+||| @ given     the string to parse
+||| @ expected  the expected result
+||| @ tFunc     the testing function to compare the results
 genericTest : Show a => (title : Maybe String)
                      -> (given : a)
                      -> (expected : a)
