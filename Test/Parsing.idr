@@ -3,7 +3,7 @@
 -- Copyright : (c) Jan de Muijnck-Hughes
 -- License   : see LICENSE
 -- --------------------------------------------------------------------- [ EOH ]
-
+||| Lightyear-based Parser Testing.
 module Test.Parsing
 
 import public Lightyear
@@ -13,13 +13,13 @@ import public Test.Utils
 
 %access export
 
-||| Run an parse test that is expected to pass.
+||| Run a parse test that is expected to pass.
 |||
-||| @title Optional Test title
-||| @p     The parser to be testing
-||| @inStr The given string to parse
-||| @exp   The expected result of parsing `inStr` using `p`
-||| @tFunc The testing function to compare the results.
+||| @ title an optional test title
+||| @ p     the parser to test
+||| @ inStr the string to parse
+||| @ exp   the expected result of parsing `inStr` using `p`
+||| @ tFunc the testing function to compare the results
 parseTestG : Show a => (title : Maybe String)
                    -> (p : Parser a)
                    -> (inStr : String)
@@ -52,11 +52,11 @@ parseTestG title p inStr exp eq = do
                , errLine
                ]
 
-||| Run an parse test that is expected to fail.
+||| Run a parse test that is expected to fail.
 |||
-||| @title Optional Test title
-||| @p     The parser to be testing
-||| @inStr The given string to parse
+||| @ title an optional test title
+||| @ p     the parser to test
+||| @ inStr the string to parse
 parseTestB : Show a => (title : Maybe String)
                    -> (p : Parser a)
                    -> (inStr : String)
@@ -75,11 +75,11 @@ parseTestB title p inStr = do
                , errLine
                ]
 
-||| Can parse something
+||| Run a parse test to ensure a parse can parse a string.
 |||
-||| @title Optional Test title
-||| @p     The parser to be testing
-||| @inStr The given string to parse
+||| @ title an optional test title
+||| @ p     the parser to test
+||| @ inStr the string to parse
 canParse : Show a => (title : Maybe String)
                    -> (p : Parser a)
                    -> (inStr : String)
@@ -96,11 +96,11 @@ canParse title p inStr = do
              ]
     Right res => pure ()
 
-||| Can parse something
+||| Run a parse test to ensure a parse cannot parse a string.
 |||
-||| @title Optional Test title
-||| @p     The parser to be testing
-||| @inStr The given string to parse
+||| @ title an optional test title
+||| @ p     the parser to test
+||| @ inStr the string to parse
 canParseNot : Show a => (title : Maybe String)
                      -> (p : Parser a)
                      -> (inStr : String)
