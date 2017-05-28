@@ -33,30 +33,17 @@ errLine = fancyLine 40 '+'
 heading : String -> String
 heading s = unlines [infoLine, s, infoLine]
 
--- Lifted/modified from String.Extra (https://github.com/yurrriq/idris-string)
-private
-pluralize : String -> String -> Nat -> String
-pluralize singular plural count = unwords $
-  if 1 == count
-     then ["1", singular]
-     else [show count, plural]
+namespace NonReporting
+  runTests : List (IO a) -> IO ()
+  runTests Nil     = do putStrLn "All Tests have passed"; putStrLn succLine
+  runTests (t::ts) = do t; runTests ts
 
-||| Return a summary of the given test `results`.
-|||
-||| ```idris example
-||| summary [True, False, True]
-||| ```
-|||
-||| @ results a vector of Boolean test results
-summary : (results : Vect n Bool) -> String
-summary {n} results =
-  pluralize "test" "tests" n ++ ", " ++
-  pluralize "failure" "failures" (fst (filter not results))
-
-||| Run a list of tests and print a summary.
-|||
-||| @ tests a list of test to run, i.e. I/O actions returning a Boolean
-runTests : (tests : List (IO Bool)) -> IO ()
-runTests tests = putStrLn !(summary <$> sequence (fromList tests))
+namespace Reporting
+  runTests : List (IO a) -> IO (List a)
+  runTests Nil     = pure Nil
+  runTests (x::xs) = do
+       r  <- x
+       rs <- Reporting.runTests xs
+       pure (r::rs)
 
 -- --------------------------------------------------------------------- [ EOF ]

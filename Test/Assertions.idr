@@ -21,12 +21,12 @@ assertFalse : Bool -> IO Bool
 assertFalse b = genericTest (Just "Assert False") b False (==)
 
 ||| Assert that a `given` is equal to `expected`.
-assertEqual : (Eq a, Show a) => (given : a) -> (expected : a) -> IO Bool
-assertEqual g e = genericTest (Just "Assert Equal") g e (==)
+assertEquals : (Eq a, Show a) => (given : a) -> (expected : a) -> IO Bool
+assertEquals g e = genericTest (Just "Assert Equals") g e (==)
 
 ||| Assert that `given` is not equal to `expected`.
-assertNotEqual : (Eq a, Show a) => (given : a) -> (expected : a) -> IO Bool
-assertNotEqual g e = genericTest (Just "Assert Not Equal") g e (/=)
+assertNotEquals : (Eq a, Show a) => (given : a) -> (expected : a) -> IO Bool
+assertNotEquals g e = genericTest (Just "Assert Not Equals") g e (\x,y => not (x == y))
 
 ||| Assert that a given `Maybe` is of the form `Just _`.
 assertJust : Show a => Maybe a -> IO Bool

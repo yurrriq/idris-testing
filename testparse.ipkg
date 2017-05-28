@@ -1,7 +1,0 @@
-package testparse
-
-pkgs = lightyear
-     , effects
-     , test
-
-modules = Test.Parsing

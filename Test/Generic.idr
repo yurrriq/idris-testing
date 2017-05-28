@@ -16,17 +16,17 @@ import public Test.Utils
 ||| @ given     the string to parse
 ||| @ expected  the expected result
 ||| @ tFunc     the testing function to compare the results
-genericTest : Show a => (title : Maybe String)
-                     -> (given : a)
-                     -> (expected : a)
-                     -> (tFunc : a -> a -> Bool)
-                     -> IO Bool
+genericTest : Show a
+           => (title : Maybe String)
+           -> (given : a)
+           -> (expected : a)
+           -> (tFunc : a -> a -> Bool)
+           -> IO Bool
 genericTest title g e eq = do
   putStrLn $ unwords ["Test:" , fromMaybe "Unnamed Test" title]
-  if eq g e
-    then pure True
-    else do
-       putStrLn $ unwords [
+  let res = eq g e
+  when (not res) $ with List do
+     putStrLn $ unwords [
              errLine
            , "\n"
            , "Error:\n\n"
@@ -39,6 +39,6 @@ genericTest title g e eq = do
            , errLine
            , "\n"
            ]
-       pure False
+  pure res
 
 -- --------------------------------------------------------------------- [ EOF ]
